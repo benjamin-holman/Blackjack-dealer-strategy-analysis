@@ -131,8 +131,66 @@ The simulation recovers the same best response for five of the six dealer rules.
 Against dealer 17 it selects 15 rather than 16: the exact gap is only 0.07 percentage points, below the ~0.2-point simulation error.
 This is why the exact method is used for the final results.
 
+## 4 Basic Strategy using the dealers upcard
+We now use python to find out a players best response given the dealers upcard and the cards that they have.
+
+## Part 4: Basic strategy (hit/stand only)
+
+Assuming the dealer stands on 17, this is the player's best action for every hand and dealer upcard, found exactly by dynamic programming.
+
+Assumptions: infinite deck, the dealer peeks for blackjack, and no doubling or splitting.
+
+**H** = hit, **S** = stand
+
+### Hard totals
+i,e if the player doesn't have an ace
+
+| Player | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | A |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 5–11 | H | H | H | H | H | H | H | H | H | H |
+| 12 | H | H | S | S | S | H | H | H | H | H |
+| 13–16 | S | S | S | S | S | H | H | H | H | H |
+| 17–20 | S | S | S | S | S | S | S | S | S | S |
+
+### Soft totals
+i.e the player has an ace
+
+| Player | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | A |
+|---|---|---|---|---|---|---|---|---|---|---|
+| A2–A6 | H | H | H | H | H | H | H | H | H | H |
+| A7 | S | S | S | S | S | S | S | H | H | H |
+| A8–A9 | S | S | S | S | S | S | S | S | S | S |
+
+Playing this strategy reduces the house edge from 5.67%  to 2.42%.
+
+We go further with this by giving players an option to double down.
+This means they can double their bet to get one more card.
+
+**D** = Double down
+
+### Hard totals
+
+| Player | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | A |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 5–8 | H | H | H | H | H | H | H | H | H | H |
+| 9 | H | D | D | D | D | H | H | H | H | H |
+| 10 | D | D | D | D | D | D | D | D | H | H |
+| 11 | D | D | D | D | D | D | D | D | D | H |
+| 12 | H | H | S | S | S | H | H | H | H | H |
+| 13–16 | S | S | S | S | S | H | H | H | H | H |
+| 17–20 | S | S | S | S | S | S | S | S | S | S |
+
+### Soft totals
+
+| Player | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | A |
+|---|---|---|---|---|---|---|---|---|---|---|
+| A2 | H | H | H | H | D | H | H | H | H | H |
+| A3–A4 | H | H | H | D | D | H | H | H | H | H |
+| A5 | H | H | D | D | D | H | H | H | H | H |
+| A6 | H | D | D | D | D | H | H | H | H | H |
+| A7 | S | D | D | D | D | S | S | H | H | H |
+| A8–A9 | S | S | S | S | S | S | S | S | S | S |
+
 ## Limitations and next steps
-- Players are restricted to stopping thresholds and do not use the information of the dealer's up-card.
-- Doubling and splitting are not considered which would reduce the house edge.
+- Splitting is not considered which would reduce the house edge even further.
 - The infinite-deck assumption removes card-removal effects. A finite shoe would allow analysis of card counting.
-- Next step: an up-card-dependent strategy, computing the player's best threshold for each dealer up-card.
